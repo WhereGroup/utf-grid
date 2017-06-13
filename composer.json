@@ -1,0 +1,41 @@
+{
+  "name": "wheregroup/utf-grid",
+  "description": "Wheregroup utf-grid element",
+  "keywords": [
+    "wheregroup",
+    "utf",
+    "grid",
+    "gis"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohamed Tahrioui",
+      "email": "mohamed.tahrioui@wheregroup.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.3",
+    "wheregroup/xml-parser":"dev-master"
+
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-4": {
+      "WhereGroup\\UTFGridBundle\\": "."
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/WhereGroup/utf-grid.git"
+    }
+  ], "extra": {
+    "branch-alias": {
+
+    }
+  }
+}

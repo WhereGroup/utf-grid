@@ -16,9 +16,7 @@
     }
   ],
   "require": {
-    "php": ">=5.3.3",
-    "wheregroup/xml-parser":"dev-master"
-
+    "php": ">=5.3.3"
   },
   "config": {
     "bin-dir": "bin"

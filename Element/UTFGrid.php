@@ -91,7 +91,7 @@ class UTFGrid extends Element
      */
     public static function getFormTemplate()
     {
-        return 'UTFGridBundle:Element:utfgrid.html.twig';
+        return 'UTFGridBundle:ElementAdmin:utfgrid.html.twig';
     }
 
 }

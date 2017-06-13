@@ -1,4 +1,4 @@
-# Mapbender gml-parser element
+# Mapbender utf-grid element
 
 
 
@@ -8,7 +8,7 @@
 
 ```sh
 $ cd application/
-$ bin/composer require "wheregroup/gml-parser"
+$ bin/composer require "wheregroup/utf-grid"
 ```
 
 ## Architecture

@@ -1,5 +1,6 @@
 <?php
 namespace WhereGroup\UTFGridBundle;
+use Mapbender\CoreBundle\Component\MapbenderBundle;
 
 /**
  * Class UTFGridBundle

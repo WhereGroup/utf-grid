@@ -61,7 +61,7 @@ class UTFGrid extends Element
      */
     public static function getType()
     {
-        return 'Mapbender\CoreBundle\Element\Type\UTFGridAdminType';
+        return 'WhereGroup\UTFGridBundle\Element\Type\UTFGridAdminType';
     }
 
     /**

@@ -44,7 +44,8 @@ class UTFGrid extends Element
     {
         return array(
             'layersets' => array(),
-            'addLayerSet' => ''
+            'addLayerSet' => '',
+            'target' => null
         );
     }
 
@@ -56,12 +57,13 @@ class UTFGrid extends Element
         return 'mapbender.mbUTFGrid';
     }
 
+
     /**
      * @inheritdoc
      */
     public static function getType()
     {
-        return 'Mapbender\CoreBundle\Element\Type\UTFGridAdminType';
+        return 'WhereGroup\UTFGridBundle\Element\Type\UTFGridAdminType';
     }
 
     /**

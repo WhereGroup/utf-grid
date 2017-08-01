@@ -3,18 +3,21 @@
 namespace WhereGroup\UTFGridBundle\Element\Type;
 
 
+use Mapbender\CoreBundle\Component\ExtendedCollection;
+use Mapbender\CoreBundle\Element\Map;
+use Mapbender\CoreBundle\Entity\Application;
 use Mapbender\CoreBundle\Entity\Layerset;
-use Mapbender\CoreBundle\Entity\Source;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
  * UTFGridAdminType
  *
  * @author Mohamed Tahrioui
  */
-class UTFGridAdminType extends AbstractType
+class UTFGridAdminType extends AbstractType implements ExtendedCollection
 {
 
     /**
@@ -31,7 +34,8 @@ class UTFGridAdminType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'application' => null
+            'application' => null,
+            'element' => null
         ));
     }
 
@@ -40,25 +44,31 @@ class UTFGridAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Application $application */
         $application = $options["application"];
-        $element = $options["element"];
-
-        // TODO: fill choices
-        $debugInformations = json_encode($application);
-        // $debugInformations = json_encode($element);
-
-        $application = $options["application"];
-        $element = $options["element"];
         $wmsServices = array();
 
-        foreach ($application->getElements() as $applicationElement) {
-            $configuration = $element->getConfiguration();
-            $isTarget = $applicationElement->getId() === intval($configuration["target"]);
-            if (!$isTarget) {
+        $builder->add('target', 'target_element',
+            array(
+            'element_class' => 'Mapbender\\CoreBundle\\Element\\Map',
+            'application' => $application,
+            'property_path' => '[target]',
+            'required' => false));
+        // TODO: fill choices
+        //$debugInformations = json_encode($application);
+        // $debugInformations = json_encode($element);
+
+        //$configuration = $element->getConfiguration();
+        foreach ($application->getElements() as $mapElement) {
+
+            // $mapElement instanceof  Map ||  is_subclass_of($mapElement, Map::class) ||
+            $isMapElement = $mapElement->getClass() == 'Mapbender\CoreBundle\Element\Map';
+
+            if (!$isMapElement) {
                 continue;
             }
 
-            $mapConfiguration = $applicationElement->getConfiguration();
+            $mapConfiguration = $mapElement->getConfiguration();
             foreach ($application->getLayersets() as $layerset) {
 
                 $isLayerset = $this->checkIfLayerset($mapConfiguration, $layerset);
@@ -66,9 +76,11 @@ class UTFGridAdminType extends AbstractType
 
                 if ($isLayerset || $isInLayersets) {
                     /**@var  Layerset $layerset*/
+
                     foreach ($layerset->getInstances() as $instance) {
+
+
                         $isLayerEnabled = $instance->isBasesource() && $instance->getEnabled();
-                        $source = $instance->getSource();
                         //TODO: add rudimentary UTF-Grid Detection mechanism f.e. check for application/json in getMap
                         if ($isLayerEnabled ) {
                             $wmsServices[strval($instance->getId())] = $instance->getTitle();
@@ -81,13 +93,14 @@ class UTFGridAdminType extends AbstractType
 
         // TODO: Use own admin type for UTFGrid rows
         $builder->add('layersets', "collection", array(
-                'property_path' => '[instances]',
-                'type' => new UTFGridInstanceSetAdminType(),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'auto_initialize' => false,
-                'options' => array('instances' => $wmsServices)
-            ));
+            'property_path' => '[instances]',
+            'type' => new UTFGridInstanceSetAdminType(),
+            'allow_add' => true,
+            'allow_delete' => true,
+            'auto_initialize' => false,
+            'options' => array('instances' => $wmsServices)
+        ));
+
 
 
 
@@ -112,6 +125,5 @@ class UTFGridAdminType extends AbstractType
     {
         return  isset($mapConfiguration['layersets']) && in_array($layerset->getId(), $mapConfiguration['layersets']);
     }
-
 
 }
